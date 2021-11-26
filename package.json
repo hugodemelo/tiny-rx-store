@@ -1,0 +1,30 @@
+{
+  "name": "tiny-rx-store",
+  "version": "1.0.0",
+  "description": "probably the dumbest store that ever existed",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugodemelo/tiny-rx-store.git"
+  },
+  "keywords": [
+    "rxjs",
+    "store"
+  ],
+  "author": "Hugo de Melo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hugodemelo/tiny-rx-store/issues"
+  },
+  "homepage": "https://github.com/hugodemelo/tiny-rx-store#readme",
+  "dependencies": {
+    "rxjs": "^7.4.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  }
+}
