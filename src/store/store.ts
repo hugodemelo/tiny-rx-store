@@ -24,10 +24,10 @@ export class Store<T extends object> {
   }
 
   selectStateByKey<K1 extends keyof T>(k1: K1): Observable<T[K1]>;
-  selectStateByKey<
-    K1 extends keyof T,
-    K2 extends keyof T[K1]
-  >(k1: K1, k2: K2): Observable<T[K1][K2]>;
+  selectStateByKey<K1 extends keyof T, K2 extends keyof T[K1]>(
+    k1: K1,
+    k2: K2
+  ): Observable<T[K1][K2]>;
   selectStateByKey<
     K1 extends keyof T,
     K2 extends keyof T[K1],
