@@ -1,3 +1,3 @@
-describe('tests for tiny-tx-store', () => {
+describe('tests for tiny-rx-store', () => {
   it('should create a store with default state', () => {});
 });
