@@ -31,16 +31,22 @@ const store = new Store<Person & Book>({
   }
 });
 
-store.selectState('person').subscribe(console.log);
-store.selectState('person', 'friends', 0).subscribe(console.log);
-store.selectState('book', 'pages').subscribe(console.log);
+store.selectStateByKey('person').subscribe(console.log);
+store.selectStateByKey('person', 'friends', 0).subscribe(console.log);
+store.selectStateByKey('book', 'pages').subscribe(console.log);
+
+store.selectState(state => {
+  return state.person.friends.filter(friend => friend.occupation === 'Guitar Player')
+}).subscribe(console.log);
 
 store.updateState(state => {
   return {
     ...state,
     person: {
       ...state.person,
-      friends: [...state.person.friends, { name: 'Dave Grohl', occupation: 'Drummer' }]
+      friends: [...state.person.friends,
+      { name: 'Dave Grohl', occupation: 'Drummer' },
+      { name: 'Zakk Wylde', occupation: 'Guitar Player' }]
     }
   };
 });

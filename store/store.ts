@@ -4,8 +4,8 @@ import { Reducer } from './types';
 
 export class Store<T extends object> {
 
-  #store: BehaviorSubject<T>;
-  #stateUpdates: Subject<Reducer<T>>;
+  readonly #store: BehaviorSubject<T>;
+  readonly #stateUpdates: Subject<Reducer<T>>;
 
   constructor(initialState: T) {
     this.#store = new BehaviorSubject(initialState);
@@ -18,30 +18,41 @@ export class Store<T extends object> {
       ).subscribe(this.#store);
   }
 
-  selectState<
+  selectStateByKey<
     K1 extends keyof T>
     (k1: K1): Observable<T[K1]>
-  selectState<
+  selectStateByKey<
     K1 extends keyof T,
     K2 extends keyof T[K1]>
     (k1: K1, k2: K2): Observable<T[K1][K2]>
-  selectState<
+  selectStateByKey<
     K1 extends keyof T,
     K2 extends keyof T[K1],
     K3 extends keyof T[K1][K2]>
     (k1: K1, k2: K2, k3: K3): Observable<T[K1][K2][K3]>
-  selectState<
+  selectStateByKey<
     K1 extends keyof T,
     K2 extends keyof T[K1],
     K3 extends keyof T[K1][K2],
     K4 extends keyof T[K1][K2][K3]>
     (k1: K1, k2: K2, k3: K3, k4: K4): Observable<T[K1][K2][K3][K4]>
-  selectState(...keys: string[]) {
+  selectStateByKey<
+    K1 extends keyof T,
+    K2 extends keyof T[K1],
+    K3 extends keyof T[K1][K2],
+    K4 extends keyof T[K1][K2][K3],
+    K5 extends keyof T[K1][K2][K3][K4]>
+    (k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): Observable<T[K1][K2][K3][K4][K5]>
+  selectStateByKey(...keys: string[]) {
     return this.#store
       .pipe(
         pluck(...keys),
         distinctUntilChanged()
       );
+  }
+
+  selectState<U>(mapFunc: (state: T) => U): Observable<U> {
+    return this.#store.pipe(map(mapFunc));
   }
 
   updateState(reducer: Reducer<T>): void {
