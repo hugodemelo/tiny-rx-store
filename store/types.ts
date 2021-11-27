@@ -4,3 +4,7 @@ export type DeepPartial<T> = {
   T[K] extends (infer U)[] ? DeepPartial<U>[] :
   T[K];
 };
+
+export type Reducer<T> = {
+  (state: T): T
+}

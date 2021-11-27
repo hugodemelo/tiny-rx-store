@@ -1,7 +1,7 @@
 {
   "name": "tiny-rx-store",
   "version": "1.0.0",
-  "description": "probably the dumbest store that ever existed",
+  "description": "a very simple rxjs store",
   "main": "index.js",
   "scripts": {
     "start": "ts-node index.ts"

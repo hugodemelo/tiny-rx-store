@@ -31,10 +31,26 @@ const store = new Store<Person & Book>({
   }
 });
 
+store.selectState('person').subscribe(console.log);
 store.selectState('person', 'friends', 0).subscribe(console.log);
 store.selectState('book', 'pages').subscribe(console.log);
 
-store.updateState({ book: { pages: 233 } });
+store.updateState(state => {
+  return {
+    ...state,
+    person: {
+      ...state.person,
+      friends: [...state.person.friends, { name: 'Dave Grohl', occupation: 'Drummer' }]
+    }
+  };
+});
 
-store.updateState({ person: { friends: [{ name: 'Zakk Wylde', occupation: 'Guitar Player' }] } });
+store.updateState(state => {
+  return {
+    ...state,
+    book: {
+      pages: 123
+    }
+  };
+});
 

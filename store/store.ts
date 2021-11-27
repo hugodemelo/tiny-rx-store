@@ -1,11 +1,11 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { pluck, scan, distinctUntilChanged } from 'rxjs/operators';
-import { DeepPartial } from './types';
+import { pluck, distinctUntilChanged, withLatestFrom, map } from 'rxjs/operators';
+import { Reducer } from './types';
 
 export class Store<T extends object> {
 
   #store: BehaviorSubject<T>;
-  #stateUpdates: Subject<DeepPartial<T>>;
+  #stateUpdates: Subject<Reducer<T>>;
 
   constructor(initialState: T) {
     this.#store = new BehaviorSubject(initialState);
@@ -13,7 +13,8 @@ export class Store<T extends object> {
 
     this.#stateUpdates
       .pipe(
-        scan((acc, curr) => ({ ...acc, ...curr }), initialState)
+        withLatestFrom(this.#store),
+        map(([reducer, state]) => reducer(state)),
       ).subscribe(this.#store);
   }
 
@@ -43,8 +44,8 @@ export class Store<T extends object> {
       );
   }
 
-  updateState(stateUpdate: DeepPartial<T>): void {
-    this.#stateUpdates.next(stateUpdate);
+  updateState(reducer: Reducer<T>): void {
+    this.#stateUpdates.next(reducer);
   }
 
   stateChanges(): Observable<T> {
