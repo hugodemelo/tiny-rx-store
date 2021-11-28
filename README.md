@@ -45,6 +45,7 @@ interface Person {
   };
 }
 
+// Create store with default state
 const store = new Store<Person>({
   person: {
     name: 'Randy Rhoads',
@@ -56,15 +57,18 @@ const store = new Store<Person>({
   },
 });
 
+// Create observables based on state properties
 store.selectStateByKey('person').subscribe(console.log);
 store.selectStateByKey('person', 'friends', 0).subscribe(console.log);
 
+// Create a custom state selector
 store.selectState(state => {
   return state.person.friends.filter(
     friend => friend.occupation === 'Guitar Player'
   );
 }).subscribe(console.log);
 
+// Update state manually with a reducer
 store.updateState(state => {
   return {
     ...state,
@@ -78,4 +82,31 @@ store.updateState(state => {
     },
   };
 });
+
+// Also includes support for actions
+class AddFriends {
+  static readonly type = '[Person] Add Friends';
+  constructor(public payload: { name: string, occupation: string }[]) {
+  }
+}
+
+// Register a reducer with an action
+store.registerReducer((state, action: AddFriends) => {
+  return {
+    ...state,
+    person: {
+      ...state.person,
+      friends: [
+        ...state.person.friends,
+        ...action.payload
+      ],
+    },
+  };
+}, AddFriends);
+
+// Dispatch action
+store.dispatch(new AddFriends([
+  { name: 'Bob', occupation: 'Programmer' },
+  { name: 'Alice', occupation: 'Security' }]
+));
 ```
