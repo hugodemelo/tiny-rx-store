@@ -1,9 +1,5 @@
 export type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends object
-    ? DeepPartial<T[K]>
-    : T[K] extends (infer U)[]
-    ? DeepPartial<U>[]
-    : T[K];
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] extends (infer U)[] ? DeepPartial<U>[] : T[K];
 };
 
 export type Reducer<T> = {
@@ -17,3 +13,5 @@ export type ReducerWithAction<T> = {
 export type Action = {
   readonly payload?: unknown;
 };
+
+export type ClassOfType<T> = new (...args: any[]) => T;

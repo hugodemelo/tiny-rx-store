@@ -1,11 +1,6 @@
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
-import {
-  pluck,
-  distinctUntilChanged,
-  withLatestFrom,
-  map,
-} from 'rxjs/operators';
-import { Reducer, Action, ReducerWithAction } from './types';
+import { pluck, distinctUntilChanged, withLatestFrom, map } from 'rxjs/operators';
+import { Reducer, Action, ReducerWithAction, ClassOfType } from './types';
 
 export class Store<T extends object> {
   private readonly store$: BehaviorSubject<T>;
@@ -41,15 +36,12 @@ export class Store<T extends object> {
   }
 
   selectStateByKey<K1 extends keyof T>(k1: K1): Observable<T[K1]>;
-  selectStateByKey<K1 extends keyof T, K2 extends keyof T[K1]>(
+  selectStateByKey<K1 extends keyof T, K2 extends keyof T[K1]>(k1: K1, k2: K2): Observable<T[K1][K2]>;
+  selectStateByKey<K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
     k1: K1,
-    k2: K2
-  ): Observable<T[K1][K2]>;
-  selectStateByKey<
-    K1 extends keyof T,
-    K2 extends keyof T[K1],
-    K3 extends keyof T[K1][K2]
-  >(k1: K1, k2: K2, k3: K3): Observable<T[K1][K2][K3]>;
+    k2: K2,
+    k3: K3
+  ): Observable<T[K1][K2][K3]>;
   selectStateByKey<
     K1 extends keyof T,
     K2 extends keyof T[K1],
@@ -75,7 +67,7 @@ export class Store<T extends object> {
     this.stateUpdates$.next(reducer);
   }
 
-  registerReducer<U>(reducer: (state: T, action: U) => T, action: any) {
+  registerReducer<U, V extends ClassOfType<U>>(reducer: (state: T, action: U) => T, action: V) {
     const actionType = this.getActionType(action);
 
     if (actionType === undefined) {
